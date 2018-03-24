@@ -2,26 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Move : MonoBehaviour {
+public class Player_Move : MonoBehaviour
+{
 
 	public int playerSpeed = 10;
 	private bool facingRight = true;
 	public int playerJumpPower = 1250;
 	private float moveX;
+	bool isGrounded = true;
 		
 	// Use this for initialization
 	// void Start () {	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		PlayerMove ();	
 	}
 
-	void PlayerMove(){
+	void OnCollisionEnter2D (Collision2D col)
+	{
+		Debug.Log ("Starting Collision");
+		if (col.gameObject.tag == ("Ground")) {
+			isGrounded = true;
+		}
+	}
+
+
+	void PlayerMove ()
+	{
 		//Controls
-		moveX = Input.GetAxis("Horizontal");
-		if(Input.GetButtonDown("Jump")){
-			Jump (); 
+		moveX = Input.GetAxis ("Horizontal");
+
+		if (Input.GetButtonDown ("Jump") && isGrounded) {
+			isGrounded = !isGrounded;
+			Jump ();
 		}
 
 		//Direction
@@ -32,18 +47,19 @@ public class Player_Move : MonoBehaviour {
 		}
 
 		//Animation
-		gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveX * playerSpeed, gameObject.GetComponent<Rigidbody2D>().velocity.y);
+		gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (moveX * playerSpeed, gameObject.GetComponent<Rigidbody2D> ().velocity.y);
 			
-		//Physics
+		//Other Physics
 	}
 
-	void Jump(){
+	void Jump ()
+	{
 		//Vertical
-		gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * playerJumpPower);
-
+		gameObject.GetComponent<Rigidbody2D> ().AddForce (Vector2.up * playerJumpPower);
 	}
 
-	void FlipPlayer(){
+	void FlipPlayer ()
+	{
 		facingRight = !facingRight;
 		Vector2 localScale = gameObject.transform.localScale;
 		localScale.x *= -1;
