@@ -22,7 +22,6 @@ public class Player_Move : MonoBehaviour
 
 	void OnCollisionEnter2D (Collision2D col)
 	{
-		Debug.Log ("Starting Collision");
 		if (col.gameObject.tag == ("Ground")) {
 			isGrounded = true;
 		}
